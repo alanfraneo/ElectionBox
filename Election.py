@@ -26,7 +26,8 @@ from PIL import Image, ImageTk
 # this function is called when submit vote button is clicked on the voting page.
 def submit_vote(candidate_id, vframe, sframe):
     # increment count in XLS and save file.
-
+    selected_candidate = candidate_id()
+    print(selected_candidate)
     # hide vote and return to splash screen
     vframe.pack_forget()
     sframe.pack(expand=True)
@@ -45,21 +46,27 @@ def get_ballot_for_constituency(constituency_id):
 
 
 def start_voting(c_id, user_id, idframe, sframe):
+    vote_selection = IntVar()
+
+    def setvar():
+        return vote_selection.get()
+
     idframe.pack_forget()
     vote_frame = Frame(election_window, bg=app_bg)
     ballot_list = get_ballot_for_constituency(c_id)
     Label(vote_frame, anchor=CENTER, text="Choose your candidate", bg=splash_bg, fg=light_font, padx=30,
           font=freesans18).pack(fill="x", expand=True, pady=30)
 
-    vote_selection = IntVar()
     for candidate in ballot_list:
         Radiobutton(vote_frame, text=candidate['Candidate']+' - Party: '+candidate['Party'], variable=vote_selection,
-                    value=candidate['id'], borderwidth=1, bg=app_bg, fg=dark_font, pady=10).pack(fill="x", anchor=W)
+                    value=int(candidate['id']), borderwidth=1, bg=app_bg, fg=dark_font, pady=10,
+                    command=setvar).pack(fill="x", anchor=W)
 
     Radiobutton(vote_frame, text="None of the above [NOTA]", variable=vote_selection,
-                value=0, borderwidth=1, bg=app_bg, fg=dark_font, pady=10).pack(fill="x", anchor=W)
+                value=0, borderwidth=1, bg=app_bg, fg=dark_font, pady=10,
+                command=setvar).pack(fill="x", anchor=W)
     Button(vote_frame, text="Submit Vote",
-           command=lambda candidate_id=vote_selection, vframe=vote_frame,sframe=sframe:
+           command=lambda candidate_id=setvar, vframe=vote_frame, sframe=sframe:
            submit_vote(candidate_id, vframe, sframe)).pack(fill="x", pady=20)
 
     vote_frame.pack(expand=True)
