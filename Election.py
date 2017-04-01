@@ -13,6 +13,10 @@
 # |
 # +confirm vote btn
 # |
+# -> voting success screen
+# |
+# + 3 seconds delay
+# |
 # -> Splash Screen
 # #######################
 # https://www.tutorialspoint.com/python/python_gui_programming.htm
@@ -23,6 +27,7 @@ from PIL import Image, ImageTk
 import tkinter.font as tkfont
 import json
 import time
+
 
 class Election:
     def __init__(self, parent):
@@ -45,6 +50,7 @@ class Election:
         self.parent.bind('<Key>', self.identify_person)
         self.show_splash_screen()
 
+    # show initial splash/ welcome screen where the fingerprint data can be received
     def show_splash_screen(self):
         intro_msg1 = Label(self.splash_frame, anchor=CENTER, text='Welcome!', bg=self.splash_bg,
                            fg=self.light_font, font=self.freesans18)
@@ -66,6 +72,7 @@ class Election:
         # http://stackoverflow.com/questions/7299955/tkinter-binding-a-function-with-arguments-to-a-widget
         self.splash_frame.pack(expand=True)
 
+    # identify voter from voter_registry using fingerprint id
     @staticmethod
     def get_person__from_fingerprint(fingerprint_data):
         identified_voter = {}
@@ -81,7 +88,7 @@ class Election:
                     identified_voter = voter
         return identified_voter
 
-
+    # when the finger print is read, check the data and find the identity of the voter and show on screen
     def identify_person(self, fingerprint_data):
         user = self.get_person__from_fingerprint(fingerprint_data)
         if len(user) > 0:
@@ -114,18 +121,21 @@ class Election:
             # http://stackoverflow.com/questions/11103741/python-tkinter-hide-a-widget-after-some-time
             self.splash_frame.after(3000, err_msg.destroy)
 
+    # function to track voters who have voted, to avoid duplicates and for auditing.
+    # modify code later to make sure there are no duplicate voter ids, to prevent multiple votes from the same person.
     @staticmethod
     def update_voted_list(voter_id, constituency_id):
         with open('voted_list.csv', mode='a', encoding='UTF-8') as b_file:
             b_file.write(str(voter_id) + ',' + str(constituency_id) + ',' + str(time.time()) + '\n')
 
+    # show the voting screen when the vote button on the identify confirmation screen is clicked.
     def start_voting(self, c_id):
         vote_selection = IntVar()
 
         def setvar():
             return vote_selection.get()
 
-        self.id_frame.pack_forget()
+        self.id_frame.destroy()
         self.vote_frame = Frame(self.parent, bg=self.app_bg)
         ballot_list = self.get_ballot_for_constituency(c_id)
         Label(self.vote_frame, anchor=CENTER, text="Choose your candidate", bg=self.splash_bg, fg=self.light_font, padx=30,
@@ -144,6 +154,7 @@ class Election:
         self.vote_frame.pack(expand=True)
         self.parent.configure(background=self.app_bg)
 
+    # returns the ballot sheet for the voter's constituency, containing the list of competing candidates
     @staticmethod
     def get_ballot_for_constituency(constituency_id):
 
@@ -157,17 +168,28 @@ class Election:
         # increment count in XLS and save file.
         selected_candidate = candidate_id()
         print(selected_candidate)
-        # hide vote and return to splash screen
+        self.update_vote_tally(candidate_id(), cons_id)
+        # hide vote and show success screen
         self.vote_frame.destroy()
-        self.id_frame.destroy()
+        self.vote_success_frame = Frame(self.parent, bg=self.app_bg)
+        Label(self.vote_success_frame, anchor=CENTER, text="Voting successful!", bg=self.app_bg, fg=self.splash_bg, padx=30,
+              font=self.freesans18).pack(fill="x", expand=True, pady=30)
+        self.vote_success_frame.pack(expand=True)
+        self.parent.configure(background=self.app_bg)
+        self.parent.after(3000, self.destroy_voting_show_splash)
+
+    # this function will be called on successful voting, this will destroy the success message frame
+    # and show the splash screen
+    def destroy_voting_show_splash(self):
+        self.vote_success_frame.destroy()
         self.splash_frame.pack(expand=True)
         # http://stackoverflow.com/questions/29634742/tkinter-toplevel-widgets-not-displaying-python
         # http://infohost.nmt.edu/tcc/help/pubs/tkinter/web/universal.html
         self.splash_frame.update_idletasks()
         self.parent.bind('<Key>', self.identify_person)
         self.parent.configure(background=self.splash_bg)
-        self.update_vote_tally(candidate_id(), cons_id)
 
+    # updates the vote count for each candidate, with constituency grouping
     @staticmethod
     def update_vote_tally(candidate_id, cons_id):
         with open('election_results.json', 'r+') as election_results_file:
