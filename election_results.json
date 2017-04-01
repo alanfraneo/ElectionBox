@@ -1,0 +1,17 @@
+[
+    {
+        "consitituency_id": 1,
+        "vote_tally": {
+            "1": 2,
+            "2": 3,
+            "0": 1
+        }
+    },
+    {
+        "consitituency_id": 2,
+        "vote_tally": {
+            "5": 3,
+            "6": 4
+        }
+    }
+]

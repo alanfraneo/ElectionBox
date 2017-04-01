@@ -1,0 +1,16 @@
+{
+  "1":
+    [
+      {"id": 1, "Candidate": "Blade Mani", "Party": "BMK"},
+      {"id": 2, "Candidate": "Rowdy Ragu", "Party": "BMM"},
+      {"id": 3, "Candidate": "Maatu Ravi", "Party": "BMW"},
+      {"id": 4, "Candidate": "Appu", "Party": "Independent"}
+    ],
+  "2":
+    [
+      {"id": 5, "Candidate": "Nalla Mani", "Party": "BMK"},
+      {"id": 6, "Candidate": "Ramarajan", "Party": "BMM"},
+      {"id": 7, "Candidate": "Ravikumar", "Party": "BMW"},
+      {"id": 8, "Candidate": "Gopinath", "Party": "Independent"}
+    ]
+}

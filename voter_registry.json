@@ -1,0 +1,11 @@
+[
+  {"voter_id": 1, "Name": "Alan", "Age": "27", "Mobile": "8056776061", "Constituency": "Velachery", "constituency_id": 1},
+  {"voter_id": 2, "Name": "Arun", "Age": "37", "Mobile": "8056776062", "Constituency": "Velachery", "constituency_id": 1},
+  {"voter_id": 3, "Name": "Anand", "Age": "47", "Mobile": "8056776063", "Constituency": "Velachery", "constituency_id": 1},
+  {"voter_id": 4, "Name": "Bala", "Age": "47", "Mobile": "8056776064", "Constituency": "Velachery", "constituency_id": 1},
+  {"voter_id": 5, "Name": "Ramki", "Age": "57", "Mobile": "8056776011", "Constituency": "Tambaram", "constituency_id": 2},
+  {"voter_id": 6, "Name": "Ragu", "Age": "22", "Mobile": "8056776022", "Constituency": "Tambaram", "constituency_id": 2},
+  {"voter_id": 7, "Name": "Rocky", "Age": "24", "Mobile": "8056776033", "Constituency": "Tambaram", "constituency_id": 2},
+  {"voter_id": 8, "Name": "Dinesh", "Age": "36", "Mobile": "8056776044", "Constituency": "Tambaram", "constituency_id": 2},
+  {"voter_id": 9, "Name": "Manish", "Age": "21", "Mobile": "8056712334", "Constituency": "Tambaram", "constituency_id": 2}
+]
